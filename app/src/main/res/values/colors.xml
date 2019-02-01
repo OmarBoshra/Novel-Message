@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="redishh">#ff5052</color>
+    <color name="LIGHTGREY">#e2e2e2</color>
+    <color name="Lightgreen">#1bff0b</color>
+    <color name="Lightblue">#77c5f9</color>
+    <color name="Yello">#ffff00</color>
+    <color name="White">#ffffff</color>
+    <color name="Lightpurpel">#b9a7ff</color>
+    <color name="Lightorange">#ffdc9d</color>
+    <color name="pink">#f4b8ff</color>
+    <color name="trans">#00ffffff</color>
+
+</resources>

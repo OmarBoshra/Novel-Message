@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+
+
+    <EditText
+        android:id="@+id/sn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="AddText/SelectedText Size"
+        android:textAllCaps="false"
+        android:inputType="number"
+        android:textColor="#ffffff"
+
+        android:textColorHint="#ffffff" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+
+        >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Set As Default"
+            android:layout_weight="1"
+            android:id="@+id/set"
+            android:background="#00ffffff"
+            android:textAllCaps="false"
+            android:textColor="#00ffff"
+
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Reset To Default"
+            android:textAllCaps="false"
+            android:background="#00ffffff"
+            android:layout_weight="1"
+            android:textColor="#00ffff"
+            android:id="@+id/reset"
+            />
+    </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/backcol"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/red"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:background="#ff5052" />
+
+                <Button
+                    android:id="@+id/lightgreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+
+                    android:background="#1bff0b" />
+
+                <Button
+                    android:id="@+id/pink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="1"
+                    android:background="#f4b8ff" />
+
+                <Button
+                    android:id="@+id/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+
+                    android:layout_weight="1"
+                    android:background="@android:color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/lightorange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="1"
+
+                    android:background="#ffdc9d" />
+
+                <Button
+                    android:id="@+id/lightblue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="1"
+
+                    android:background="#77c5f9" />
+
+                <Button
+                    android:id="@+id/lightpurpel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="1"
+                    android:background="#b9a7ff" />
+
+                <Button
+                    android:id="@+id/yellow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="1"
+                    android:background="#f7ff04" />
+            </LinearLayout>
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/typface"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:baselineAligned="false"
+            android:id="@+id/topf"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/casual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:fontFamily="casual"
+                android:text="AddMessage"
+                android:textAllCaps="false"
+                 />
+
+            <Button
+                android:id="@+id/cursive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:fontFamily="cursive"
+                android:text="AddMessage"
+                android:textAllCaps="false"
+                 />
+
+            <Button
+                android:id="@+id/mono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:fontFamily="serif-monospace"
+                android:text="AddMessage"
+                android:textAllCaps="false"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/ssc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#ffffff"
+
+                android:text="AddMessage"
+android:typeface="normal"
+                android:textAllCaps="false"
+                />
+
+            <Button
+                android:id="@+id/cond"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:fontFamily="sans-serif-condensed"
+                android:text="AddMessage"
+                android:textAllCaps="false"
+                />
+
+            <Button
+                android:id="@+id/serif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:fontFamily="serif"
+                android:text="AddMessage"
+                android:textAllCaps="false"
+                 />
+        </LinearLayout>
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:checked="false"
+        android:text="Set as Default" />
+
+    </LinearLayout>

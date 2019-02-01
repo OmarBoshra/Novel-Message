@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="Enable/Disable:Textautocorrection"
+        android:id="@+id/ac" />
+
+    <item
+        android:title="C"
+
+        android:id="@+id/clear"
+        app:showAsAction="always"
+
+        />
+    <item
+        android:title="BG"
+        android:id="@+id/bg"
+        app:showAsAction="always" />
+    <item
+        android:title="[ + ]"
+        android:id="@+id/snapshot"
+        app:showAsAction="always" />
+
+    <item
+        android:title="{S}"
+        android:id="@+id/select"
+        app:showAsAction="always" />
+    <item
+        android:title="H"
+        android:id="@+id/HIDE"
+        app:showAsAction="always" />
+    <item
+        android:title="s"
+        android:icon="@mipmap/share"
+        android:id="@+id/share"
+        app:showAsAction="always" />
+
+
+
+</menu>
