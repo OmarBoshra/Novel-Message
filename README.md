@@ -617,7 +617,8 @@ After thorough testing and investigation on text behavior in android this method
         }
 ```
  
-As complicated as it seems its actually extremely fast because it takes all  different types of spans simulatinusly in one loop .
+As complicated as it seems its actually extremely fast because it takes all  different types of spans  
+simulatinusly in one loop .
 It deals with a major problem in spanning text in android and thats when part
 of a spanned text is spanned the texts original 
 span gets removed.
