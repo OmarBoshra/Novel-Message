@@ -64,7 +64,7 @@ import java.io.IOException;
 
 public class Uninterface extends AppCompatActivity {
     private InterstitialAd add;
-
+    private float def = 75;
     private int ac = 0;
     private int ts = 1;
     private String serial = "";
@@ -159,7 +159,6 @@ public class Uninterface extends AppCompatActivity {
                     m.setGravity(orientation);
             m.setTextSize((float) (size/1.5));
             m.setText(RichText);
-            Toast.makeText(this, String.valueOf(m.getTextSize()), Toast.LENGTH_SHORT).show();
 
 
 
@@ -210,8 +209,8 @@ public void onAdClosed() {
 
 
         if (pref.contains("DFS")) {//for setting defaut size
+def=(pref.getFloat("DFS", (float) 0.0));
 
-            m.setTextSize((int) pref.getFloat("DFS", (float) 0.0));
         }
 
         getSupportActionBar().hide();
@@ -1435,10 +1434,12 @@ if (c==3){
                     d.dismiss();
                     return;
                 }
-                m.setTextSize((float) (ts/1.5));
+
+                m.setTextSize(def=(float) (ts/1.5));
+
                 pref = getApplicationContext().getSharedPreferences("MyPref", 0);
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putFloat("DFS", ts);
+                editor.putFloat("DFS", (float) (ts/1.5));
                 editor.apply();
                 m.removeTextChangedListener(forsize);
 
@@ -1455,13 +1456,13 @@ if(c==0){
     d.dismiss();
     return;
 }
-
+def=75;
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putFloat("DFS", 75);
                 editor.apply();
 
-                m.setTextSize(75);
+                m.setTextSize(def);
 
                 d.dismiss();
             }
@@ -1586,6 +1587,7 @@ private void colorset(int col){
         if (id == R.id.clear) {
             m.getText().clearSpans();
             m.setText("");
+            m.setTextSize(def);
             pos=0;
 
         }
