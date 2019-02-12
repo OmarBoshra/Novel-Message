@@ -123,7 +123,6 @@ public class Uninterface extends AppCompatActivity {
             float size= (c.getFloat(c.getColumnIndex(Database.size)));
             int orientation= (c.getInt(c.getColumnIndex(Database.orientation)));
 
-            Toast.makeText(this, String.valueOf(size), Toast.LENGTH_SHORT).show();
             SpannableString RichText= SpannableString.valueOf(TEXT);
             if (!seriald.isEmpty()) {
                 String[] commas = seriald.split(",");
