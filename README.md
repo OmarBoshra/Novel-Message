@@ -15,7 +15,7 @@ and both the **start** and **end** of the spanned text.
 > **-3** underline  
 > **-4** italic  
 > **1** decrease text size by amount **var**  
-> **2** decrease text size by amount **var** 
+> **2** decrease text size by amount **var**  
 > (**any size**) changes text to that size
 
 
