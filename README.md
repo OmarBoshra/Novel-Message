@@ -670,9 +670,9 @@ it also comes with these 2 methods
 
         return subvar;
     }
-    ```
+```
  
-# **Saving and retriving**
+**Saving and retriving**
 
 Now since the spanning method separates all the spans preventing any overlap between them the spans can be extracted in string form ,saved then retrieved and spanned normally .Using the following methods
 
