@@ -829,6 +829,8 @@ And finally Retrieving from SQLite database:-
     
             }
 ```
+This app is called NovelMessages https://play.google.com/store/apps/details?id=com.app.boshra.fragments
 
+it has other great features but simple and efficent text spanning is its main one.
     
     
