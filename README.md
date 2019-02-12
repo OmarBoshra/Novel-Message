@@ -6,8 +6,7 @@ A simple framework for text styling in android
 In android its not very simple to manipulate text in a simple EditText without
 using a special library or some form of richtext xml widget that consumes large amount of
 space and makes all text editors similar .This app does just that a simple customization text
-editing method exists that
-accepts simple parameters of type or size of span 
+editing method exists that accepts simple parameters of type or size of span 
 and both the **start** and **end** of the spanned text.
 
 >  For the size parameter :  
@@ -15,6 +14,8 @@ and both the **start** and **end** of the spanned text.
 > **-2** Highlights text provided the color is in  integer hicolor  
 > **-3** underline  
 > **-4** italic  
+> **1** decrease text size by amount **var**  
+> **2** decrease text size by amount **var** 
   (**any size**) changes text to that size
 
 
