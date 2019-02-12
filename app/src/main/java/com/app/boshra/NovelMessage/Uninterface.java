@@ -1735,7 +1735,7 @@ private void colorset(int col){
 
                 // DATABASE saving
                 serialization();
-                Toast.makeText(this, serial, Toast.LENGTH_SHORT).show();
+
                 values.put(Database.Text, m.getText().toString());
 
                 values.put(Database.RICHText, serial);
