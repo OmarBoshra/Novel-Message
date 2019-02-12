@@ -12,6 +12,7 @@ public class Database extends SQLiteOpenHelper {
 
     public static final String Text = "Text";
     public static final String size = "size";
+    public static final String orientation = "orientation";
     public static final String RICHText = "RICHText";
 
     public Database(Context context) {
@@ -22,7 +23,7 @@ public class Database extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         final String t2 = "CREATE TABLE " +MTable+ "("+
-                Text + " TEXT," + size + " INTEGER,"+ RICHText + " TEXT"+")";
+                Text + " TEXT," + size + " REAL,"+ orientation + " INTEGER,"+RICHText + " TEXT"+")";
 
         db.execSQL(t2);
     }

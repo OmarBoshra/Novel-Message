@@ -120,9 +120,10 @@ public class Uninterface extends AppCompatActivity {
 
             String TEXT = c.getString(c.getColumnIndex(Database.Text));
             String seriald= c.getString(c.getColumnIndex(Database.RICHText));
-            int size= (c.getInt(c.getColumnIndex(Database.size)));
+            float size= (c.getFloat(c.getColumnIndex(Database.size)));
+            int orientation= (c.getInt(c.getColumnIndex(Database.orientation)));
 
-
+            Toast.makeText(this, String.valueOf(size), Toast.LENGTH_SHORT).show();
             SpannableString RichText= SpannableString.valueOf(TEXT);
             if (!seriald.isEmpty()) {
                 String[] commas = seriald.split(",");
@@ -156,8 +157,10 @@ public class Uninterface extends AppCompatActivity {
                 }
 
             }
-            m.setTextSize((float)size);
+                    m.setGravity(orientation);
+            m.setTextSize((float) (size/1.5));
             m.setText(RichText);
+            Toast.makeText(this, String.valueOf(m.getTextSize()), Toast.LENGTH_SHORT).show();
 
 
 
@@ -1194,6 +1197,7 @@ try {
             typface.setVisibility(View.VISIBLE);
             LinearLayout top = d.findViewById(R.id.topf);
             top.setVisibility(View.GONE);
+
             smallcaps.setText("Left");
             cond.setText("Middle");
             serif.setText("Right");
@@ -1380,6 +1384,7 @@ try {
             public void onClick(View v) {
 
 if (c==3){
+
     m.setGravity(Gravity.START);
 }else {
     if (cb.isChecked()) {
@@ -1743,6 +1748,9 @@ private void colorset(int col){
                 values.put(Database.Text, m.getText().toString());
                 values.put(Database.size, m.getTextSize());
                 values.put(Database.RICHText, serial);
+                values.put(Database.orientation, m.getGravity());
+                Toast.makeText(this, String.valueOf(m.getTextSize()), Toast.LENGTH_SHORT).show();
+
                 if(c.getCount()==0) {
                     sql.insert(Database.MTable, null, values);
                 }else
