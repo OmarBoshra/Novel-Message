@@ -672,6 +672,166 @@ it also comes with these 2 methods
     }
     ```
  
+# **Saving and retriving**
+
+Now since the spanning method separates all the spans preventing any overlap between them the spans can be extracted in string form ,saved then retrieved and spanned normally .Using the following methods
+
+This method serializes the spans into String form:-
+
+```java
+        private void serialization(){
+            serial="";
+    //initiation
+            AbsoluteSizeSpan[] spannedsize = m.getText().getSpans(0, m.length(), AbsoluteSizeSpan.class);
+            StyleSpan[] spannedsize2 = m.getText().getSpans(0, m.length(), StyleSpan.class);
+            BackgroundColorSpan[] spannedsize3 = m.getText().getSpans(0, m.length(), BackgroundColorSpan.class);
+            UnderlineSpan[] spannedsize4 = m.getText().getSpans(0, m.length(), UnderlineSpan.class);
+    
+            int totallength = spannedsize.length + spannedsize2.length + spannedsize3.length + spannedsize4.length;
+    for (int i=0;i<totallength;i++){
+        int startspan=-1,endspan=-1,startspan2=-1,endspan2=-1,startspan3=-1,endspan3=-1,startspan4=-1,endspan4=-1;
+            if (spannedsize.length>i){
+               startspan=m.getText().getSpanStart(spannedsize[i]);
+                endspan=m.getText().getSpanEnd(spannedsize[i]);
+    
+                serial=serial+startspan+" "+endspan+" "+"s"+spannedsize[i].getSize();
+    
+            }
+            if (spannedsize2.length>i) {
+                startspan2 = m.getText().getSpanStart(spannedsize2[i]);
+                endspan2 = m.getText().getSpanEnd(spannedsize2[i]);
+                if (startspan == startspan2 && endspan == endspan2) {
+                    switch (spannedsize2[i].getStyle()) {
+                        case Typeface.ITALIC:
+                            serial = serial +" "+"I";
+                            break;
+                        case Typeface.BOLD:
+                            serial = serial +" "+ "B";
+                            break;
+                        case Typeface.BOLD_ITALIC:
+                            serial = serial +" "+ "BI";
+                            break;
+                    }
+    
+                } else {
+    
+                    switch (spannedsize2[i].getStyle()) {
+                        case Typeface.ITALIC:
+                            serial = serial + (serial.isEmpty() || serial.charAt(serial.length() - 1) == ',' ? "" : " ,") + startspan2 + " " + endspan2 + " " + "I";
+                            break;
+                        case Typeface.BOLD:
+                            serial = serial + (serial.isEmpty() || serial.charAt(serial.length() - 1) == ',' ? "" : " ,") + startspan2 + " " + endspan2 + " " + "B";
+                            break;
+                        case Typeface.BOLD_ITALIC:
+                            serial = serial + (serial.isEmpty() || serial.charAt(serial.length() - 1) == ',' ? "" : " ,") + startspan2 + " " + endspan2 + " " + "BI";
+                            break;
+                    }
+    
+    
+                }
+                if (startspan > -1) {
+                    totallength--;
+                }
+            }
+    
+            if (spannedsize3.length>i){
+                startspan3=m.getText().getSpanStart(spannedsize3[i]);
+                endspan3=m.getText().getSpanEnd(spannedsize3[i]);
+                if( startspan3==startspan2&&endspan3==endspan2||startspan3==startspan&&endspan3==endspan){
+                    spannedsize3[i].getBackgroundColor();
+                    serial=serial+" "+spannedsize3[i].getBackgroundColor();
+    
+                }else{
+                    serial=serial+(serial.isEmpty()||serial.charAt(serial.length()-1)==','?"":" ,")+startspan3+" "+endspan3+" "+spannedsize3[i].getBackgroundColor();
+    
+                }
+                if(startspan>-1||startspan2>-1){
+                    totallength--;
+                }
+            }
+        if (spannedsize4.length>i){
+            startspan4=m.getText().getSpanStart(spannedsize4[i]);
+            endspan4=m.getText().getSpanEnd(spannedsize4[i]);
+            if( startspan3==startspan4&&endspan3==endspan4||startspan4==startspan2&&endspan4==endspan2||startspan4==startspan&&endspan4==endspan){
+                serial=serial+" "+"U";
+    
+            }else{
+                serial=serial+(serial.isEmpty()||serial.charAt(serial.length()-1)==','?"":" ,")+startspan4+" "+endspan4+" "+"U";
+    
+            }
+    
+            if(startspan>-1||startspan2>-1||startspan3>-1){
+                totallength--;
+            }
+        }
+    
+            serial=serial+" ,";
+        }
+        }
+```
+The method gets called then saving the text and **serial** string separately 
+(can be added inside  **onBackPressed()**
+function.
+```java
+          serialization();
+            Toast.makeText(this, serial, Toast.LENGTH_SHORT).show();
+            values.put(Database.Text, m.getText().toString());
+
+            values.put(Database.RICHText, serial);
+            if(c.getCount()==0) {
+                Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
+                sql.insert(Database.MTable, null, values);
+                Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
+            }else
+                sql.update(Database.MTable, values, null, null);
+            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+```
+And finally Retrieving from SQLite database:-
+```java
+     if (c.moveToFirst()) {//retrival
+                String TEXT = c.getString(c.getColumnIndex(Database.Text));
+                String seriald= c.getString(c.getColumnIndex(Database.RICHText));
+    
+                SpannableString RichText= SpannableString.valueOf(TEXT);
+    
+                if (!seriald.isEmpty()) {
+                    String[] commas = seriald.split(",");
+                    for (int i = 0; i < commas.length; i++) {
+                        int left = Integer.parseInt(commas[i].substring(0, commas[i].indexOf(" ")));
+                        int right = Integer.parseInt(commas[i].substring(commas[i].indexOf(" ") + 1, commas[i].indexOf(" ", commas[i].indexOf(" ") + 1)));
+    
+    
+    //search on types in the commas[i] and span accordingly.
+                        if (commas[i].contains("BI")) {
+                            RichText.setSpan(new android.text.style.StyleSpan(Typeface.BOLD_ITALIC), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        if (commas[i].contains("B")) {
+                            RichText.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        if (commas[i].contains("I")) {
+                            RichText.setSpan(new android.text.style.StyleSpan(Typeface.ITALIC), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        if (commas[i].contains("U")) {
+                            RichText.setSpan((new UnderlineSpan()), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        if (commas[i].contains("-")) {
+                            int color = Integer.parseInt(commas[i].substring(commas[i].indexOf("-"), commas[i].indexOf(" ", commas[i].indexOf("-"))));
+                            RichText.setSpan((new BackgroundColorSpan(color)), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        if (commas[i].contains("s")) {
+                            int Size = Integer.parseInt(commas[i].substring(commas[i].indexOf('s') + 1, commas[i].indexOf(" ", commas[i].indexOf('s') + 1)));
+                            RichText.setSpan(new AbsoluteSizeSpan(Size), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+    
+                    }
+    
+                }
+                m.setText(RichText);
+    
+    
+    
+            }
+```
 
     
     
