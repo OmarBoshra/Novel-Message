@@ -1749,8 +1749,6 @@ private void colorset(int col){
                 values.put(Database.size, m.getTextSize());
                 values.put(Database.RICHText, serial);
                 values.put(Database.orientation, m.getGravity());
-                Toast.makeText(this, String.valueOf(m.getTextSize()), Toast.LENGTH_SHORT).show();
-
                 if(c.getCount()==0) {
                     sql.insert(Database.MTable, null, values);
                 }else
