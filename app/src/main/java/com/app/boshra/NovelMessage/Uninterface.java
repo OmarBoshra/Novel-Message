@@ -116,11 +116,14 @@ public class Uninterface extends AppCompatActivity {
 
 
         if (c.moveToFirst()) {//retrival
+
+
             String TEXT = c.getString(c.getColumnIndex(Database.Text));
             String seriald= c.getString(c.getColumnIndex(Database.RICHText));
+            int size= (c.getInt(c.getColumnIndex(Database.size)));
+
 
             SpannableString RichText= SpannableString.valueOf(TEXT);
-
             if (!seriald.isEmpty()) {
                 String[] commas = seriald.split(",");
                 for (int i = 0; i < commas.length; i++) {
@@ -153,6 +156,7 @@ public class Uninterface extends AppCompatActivity {
                 }
 
             }
+            m.setTextSize((float)size);
             m.setText(RichText);
 
 
@@ -1737,12 +1741,10 @@ private void colorset(int col){
                 serialization();
 
                 values.put(Database.Text, m.getText().toString());
-
+                values.put(Database.size, m.getTextSize());
                 values.put(Database.RICHText, serial);
                 if(c.getCount()==0) {
-                    Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
                     sql.insert(Database.MTable, null, values);
-                    Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
                 }else
                     sql.update(Database.MTable, values, null, null);
                 Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();

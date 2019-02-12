@@ -11,6 +11,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String MTable = "MTable";
 
     public static final String Text = "Text";
+    public static final String size = "size";
     public static final String RICHText = "RICHText";
 
     public Database(Context context) {
@@ -21,7 +22,7 @@ public class Database extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         final String t2 = "CREATE TABLE " +MTable+ "("+
-                Text + " TEXT," + RICHText + " TEXT"+")";
+                Text + " TEXT," + size + " INTEGER,"+ RICHText + " TEXT"+")";
 
         db.execSQL(t2);
     }
