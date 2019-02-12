@@ -774,14 +774,11 @@ The method gets called then saving the text and **serial** string separately
 function.
 ```java
           serialization();
-            Toast.makeText(this, serial, Toast.LENGTH_SHORT).show();
             values.put(Database.Text, m.getText().toString());
 
             values.put(Database.RICHText, serial);
             if(c.getCount()==0) {
-                Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
                 sql.insert(Database.MTable, null, values);
-                Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
             }else
                 sql.update(Database.MTable, values, null, null);
             Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
