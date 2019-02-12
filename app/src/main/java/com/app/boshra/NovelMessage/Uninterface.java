@@ -4,9 +4,12 @@ package com.app.boshra.NovelMessage;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -20,7 +23,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
@@ -65,6 +67,7 @@ public class Uninterface extends AppCompatActivity {
 
     private int ac = 0;
     private int ts = 1;
+    private String serial = "";
     private EditText m;
     private Handler handler;
     private LinearLayout tabmain;
@@ -72,7 +75,6 @@ public class Uninterface extends AppCompatActivity {
     private InputMethodManager imm;
     private int CurrentSize = 0;
     private int var = 0;
-    private int td = 0;
     private int pos = 0;
     private SpannedString a;
     private SharedPreferences pref;
@@ -87,6 +89,10 @@ public class Uninterface extends AppCompatActivity {
     private Bitmap bitmap;
     private Window window;
     private Boolean  snapped =false;
+    Database db ;
+    SQLiteDatabase sql ;
+    Cursor c ;
+    ContentValues values;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,11 +106,59 @@ public class Uninterface extends AppCompatActivity {
         setContentView(R.layout.activity_uninterface);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
-
+        db = new Database(Uninterface.this);
+        sql = db.getWritableDatabase();
+        c = sql.rawQuery("select * from " + Database.MTable, null);
+        values = new ContentValues();
 
         handler = new Handler();//TO KEEP CURSOR FROM DISSAPEARING
         m = findViewById(R.id.mi);
+
+
+        if (c.moveToFirst()) {//retrival
+            String TEXT = c.getString(c.getColumnIndex(Database.Text));
+            String seriald= c.getString(c.getColumnIndex(Database.RICHText));
+
+            SpannableString RichText= SpannableString.valueOf(TEXT);
+
+            if (!seriald.isEmpty()) {
+                String[] commas = seriald.split(",");
+                for (int i = 0; i < commas.length; i++) {
+                    int left = Integer.parseInt(commas[i].substring(0, commas[i].indexOf(" ")));
+                    int right = Integer.parseInt(commas[i].substring(commas[i].indexOf(" ") + 1, commas[i].indexOf(" ", commas[i].indexOf(" ") + 1)));
+
+
+//search on types in the commas[i] and span accordingly.
+                    if (commas[i].contains("BI")) {
+                        RichText.setSpan(new android.text.style.StyleSpan(Typeface.BOLD_ITALIC), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    if (commas[i].contains("B")) {
+                        RichText.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    if (commas[i].contains("I")) {
+                        RichText.setSpan(new android.text.style.StyleSpan(Typeface.ITALIC), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    if (commas[i].contains("U")) {
+                        RichText.setSpan((new UnderlineSpan()), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    if (commas[i].contains("-")) {
+                        int color = Integer.parseInt(commas[i].substring(commas[i].indexOf("-"), commas[i].indexOf(" ", commas[i].indexOf("-"))));
+                        RichText.setSpan((new BackgroundColorSpan(color)), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    if (commas[i].contains("s")) {
+                        int Size = Integer.parseInt(commas[i].substring(commas[i].indexOf('s') + 1, commas[i].indexOf(" ", commas[i].indexOf('s') + 1)));
+                        RichText.setSpan(new AbsoluteSizeSpan(Size), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+
+                }
+
+            }
+            m.setText(RichText);
+
+
+
+        }
+
         //ads
         MobileAds.initialize(this, "ca-app-pub-6007761255192812~3818916897");
         add = new InterstitialAd(this);
@@ -164,27 +218,28 @@ public void onAdClosed() {
 
                 tabmain.setVisibility(View.VISIBLE);
                 getSupportActionBar().show();
-                m.setCursorVisible(true);
                 main.setLayoutTransition(null);
             }
         }, 1100);
         m.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                m.setCursorVisible(true);
                 selection();
 
             }
         });
+
+
+
+
         m.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 handler.removeCallbacksAndMessages(null);
                 main.setLayoutTransition(null);
-                m.setCursorVisible(true);
-                if (td == 0) {
-                    m.setText("");
-                    td = 1;
-                }
+
+
 
                 m.requestFocus();
                 pos = m.getOffsetForPosition(event.getX(), event.getY());
@@ -229,7 +284,7 @@ snap.setOnClickListener(new View.OnClickListener() {
         if(tabmain.getVisibility()==View.VISIBLE){
             tabmain.setVisibility(View.GONE);
         }
-        capture(snap.getText().equals("[+]")?1:2);
+        capture(snap.getText().equals("📤")?1:2);
         Handler handler4 = new Handler();
         handler4.postDelayed(new Runnable() {//after pressing when there is a selection
             @Override
@@ -359,6 +414,96 @@ snap.setOnClickListener(new View.OnClickListener() {
         }
         Spanning(0, autoselection()[0], autoselection()[1]);
     }
+
+    private void serialization(){
+        serial="";
+//initiation
+        AbsoluteSizeSpan[] spannedsize = m.getText().getSpans(0, m.length(), AbsoluteSizeSpan.class);
+        StyleSpan[] spannedsize2 = m.getText().getSpans(0, m.length(), StyleSpan.class);
+        BackgroundColorSpan[] spannedsize3 = m.getText().getSpans(0, m.length(), BackgroundColorSpan.class);
+        UnderlineSpan[] spannedsize4 = m.getText().getSpans(0, m.length(), UnderlineSpan.class);
+
+        int totallength = spannedsize.length + spannedsize2.length + spannedsize3.length + spannedsize4.length;
+for (int i=0;i<totallength;i++){
+    int startspan=-1,endspan=-1,startspan2=-1,endspan2=-1,startspan3=-1,endspan3=-1,startspan4=-1,endspan4=-1;
+        if (spannedsize.length>i){
+           startspan=m.getText().getSpanStart(spannedsize[i]);
+            endspan=m.getText().getSpanEnd(spannedsize[i]);
+
+            serial=serial+startspan+" "+endspan+" "+"s"+spannedsize[i].getSize();
+
+        }
+        if (spannedsize2.length>i) {
+            startspan2 = m.getText().getSpanStart(spannedsize2[i]);
+            endspan2 = m.getText().getSpanEnd(spannedsize2[i]);
+            if (startspan == startspan2 && endspan == endspan2) {
+                switch (spannedsize2[i].getStyle()) {
+                    case Typeface.ITALIC:
+                        serial = serial +" "+"I";
+                        break;
+                    case Typeface.BOLD:
+                        serial = serial +" "+ "B";
+                        break;
+                    case Typeface.BOLD_ITALIC:
+                        serial = serial +" "+ "BI";
+                        break;
+                }
+
+            } else {
+
+                switch (spannedsize2[i].getStyle()) {
+                    case Typeface.ITALIC:
+                        serial = serial + (serial.isEmpty() || serial.charAt(serial.length() - 1) == ',' ? "" : " ,") + startspan2 + " " + endspan2 + " " + "I";
+                        break;
+                    case Typeface.BOLD:
+                        serial = serial + (serial.isEmpty() || serial.charAt(serial.length() - 1) == ',' ? "" : " ,") + startspan2 + " " + endspan2 + " " + "B";
+                        break;
+                    case Typeface.BOLD_ITALIC:
+                        serial = serial + (serial.isEmpty() || serial.charAt(serial.length() - 1) == ',' ? "" : " ,") + startspan2 + " " + endspan2 + " " + "BI";
+                        break;
+                }
+
+
+            }
+            if (startspan > -1) {
+                totallength--;
+            }
+        }
+
+        if (spannedsize3.length>i){
+            startspan3=m.getText().getSpanStart(spannedsize3[i]);
+            endspan3=m.getText().getSpanEnd(spannedsize3[i]);
+            if( startspan3==startspan2&&endspan3==endspan2||startspan3==startspan&&endspan3==endspan){
+                spannedsize3[i].getBackgroundColor();
+                serial=serial+" "+spannedsize3[i].getBackgroundColor();
+
+            }else{
+                serial=serial+(serial.isEmpty()||serial.charAt(serial.length()-1)==','?"":" ,")+startspan3+" "+endspan3+" "+spannedsize3[i].getBackgroundColor();
+
+            }
+            if(startspan>-1||startspan2>-1){
+                totallength--;
+            }
+        }
+    if (spannedsize4.length>i){
+        startspan4=m.getText().getSpanStart(spannedsize4[i]);
+        endspan4=m.getText().getSpanEnd(spannedsize4[i]);
+        if( startspan3==startspan4&&endspan3==endspan4||startspan4==startspan2&&endspan4==endspan2||startspan4==startspan&&endspan4==endspan){
+            serial=serial+" "+"U";
+
+        }else{
+            serial=serial+(serial.isEmpty()||serial.charAt(serial.length()-1)==','?"":" ,")+startspan4+" "+endspan4+" "+"U";
+
+        }
+
+        if(startspan>-1||startspan2>-1||startspan3>-1){
+            totallength--;
+        }
+    }
+
+        serial=serial+" ,";
+    }
+    }
     private void Spanning(int size, int ss, int se) {//Styling
         int st = m.getSelectionStart();
         int end = m.getSelectionEnd();
@@ -376,6 +521,7 @@ snap.setOnClickListener(new View.OnClickListener() {
         SpannableString selectionl = new SpannableString("");
         SpannableString selectionr = new SpannableString("");
         SpannedString newparts = new SpannedString("");
+
         AbsoluteSizeSpan[] spannedsize = m.getText().getSpans(ss, se, AbsoluteSizeSpan.class);
         StyleSpan[] spannedsize2 = m.getText().getSpans(ss, se, StyleSpan.class);
         BackgroundColorSpan[] spannedsize3 = m.getText().getSpans(ss, se, BackgroundColorSpan.class);
@@ -1347,6 +1493,7 @@ if(c==0){
             SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
             SharedPreferences.Editor editor = pref.edit();
             editor.putInt("typ", d);
+
             editor.apply();
         }
 
@@ -1439,6 +1586,8 @@ private void colorset(int col){
             if (m.getText().toString().isEmpty()) {
                 selection();
             } else {
+                Editable text = m.getText();
+                text.replace(0, 1, text.subSequence(0, 1), 0, 1);
                 m.selectAll();
                 selection();
             }
@@ -1449,12 +1598,7 @@ private void colorset(int col){
         }
         if (id == R.id.snapshot) {
             snap.setVisibility(View.VISIBLE);
-            snap.setText("[+]");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            snap.setBackground(null);
-            }else
-                snap.setBackgroundDrawable(null);
-
+            snap.setText("📷");
            afterselection();
         }
         if (id == R.id.HIDE) {
@@ -1465,12 +1609,7 @@ private void colorset(int col){
         }
         if (id == R.id.share) {
             snap.setVisibility(View.VISIBLE);
-            snap.setText("");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                snap.setBackground(ContextCompat.getDrawable(this, R.mipmap.share));
-            }else
-                snap.setBackgroundDrawable(ContextCompat.getDrawable(this, R.mipmap.share));
-
+            snap.setText("📤");
             afterselection();
         }
         if (id == R.id.ac) {
@@ -1593,9 +1732,23 @@ private void colorset(int col){
             if (tabmain.getVisibility() == View.VISIBLE ) {
                 tabmain.setVisibility(View.GONE);
 
-                Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
 
-            } else
+                // DATABASE saving
+                serialization();
+                Toast.makeText(this, serial, Toast.LENGTH_SHORT).show();
+                values.put(Database.Text, m.getText().toString());
+
+                values.put(Database.RICHText, serial);
+                if(c.getCount()==0) {
+                    Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
+                    sql.insert(Database.MTable, null, values);
+                    Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
+                }else
+                    sql.update(Database.MTable, values, null, null);
+                Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+
+
+        } else
 
                 onBackPressed();
         }

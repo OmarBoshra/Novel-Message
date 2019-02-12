@@ -6,18 +6,19 @@
         android:id="@+id/ac" />
 
     <item
-        android:title="C"
+        android:title="✖"
 
         android:id="@+id/clear"
         app:showAsAction="always"
 
         />
     <item
-        android:title="BG"
+        android:title="🎨"
+
         android:id="@+id/bg"
         app:showAsAction="always" />
     <item
-        android:title="[ + ]"
+        android:title="📷"
         android:id="@+id/snapshot"
         app:showAsAction="always" />
 
@@ -30,8 +31,8 @@
         android:id="@+id/HIDE"
         app:showAsAction="always" />
     <item
-        android:title="s"
-        android:icon="@mipmap/share"
+        android:title="📤"
+
         android:id="@+id/share"
         app:showAsAction="always" />
 

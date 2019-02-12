@@ -11,8 +11,8 @@
         android:layout_width="36dp"
         android:layout_height="35dp"
         android:background="@color/trans"
-        android:text="[+]"
-        android:textColor="#07453f"
+        android:text="📷"
+        android:textColor="#7e00ffe6"
         android:textSize="25dp"
         android:fontFamily="serif"
         android:visibility="invisible"
@@ -44,8 +44,8 @@
 
             android:gravity="center"
             android:padding="4dp"
-            android:text="Add Message"
-            android:textColor="#000000"
+            android:textColorHint="#000000"
+            android:hint="📝"
             android:textColorHighlight="#00fff7"
             android:textSize="72dp"
 
