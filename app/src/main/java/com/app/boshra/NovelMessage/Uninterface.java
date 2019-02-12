@@ -134,12 +134,13 @@ public class Uninterface extends AppCompatActivity {
 //search on types in the commas[i] and span accordingly.
                     if (commas[i].contains("BI")) {
                         RichText.setSpan(new android.text.style.StyleSpan(Typeface.BOLD_ITALIC), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
-                    if (commas[i].contains("B")) {
-                        RichText.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
-                    if (commas[i].contains("I")) {
-                        RichText.setSpan(new android.text.style.StyleSpan(Typeface.ITALIC), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }else {
+                        if (commas[i].contains("B")) {
+                            RichText.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        if (commas[i].contains("I")) {
+                            RichText.setSpan(new android.text.style.StyleSpan(Typeface.ITALIC), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
                     }
                     if (commas[i].contains("U")) {
                         RichText.setSpan((new UnderlineSpan()), left, right, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -1745,7 +1746,6 @@ private void colorset(int col){
 
                 // DATABASE saving
                 serialization();
-
                 values.put(Database.Text, m.getText().toString());
                 values.put(Database.size, m.getTextSize());
                 values.put(Database.RICHText, serial);
