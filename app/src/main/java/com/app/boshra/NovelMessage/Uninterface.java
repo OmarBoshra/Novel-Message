@@ -60,6 +60,8 @@ import com.google.android.gms.ads.MobileAds;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 
 
 public class Uninterface extends AppCompatActivity {
@@ -290,7 +292,7 @@ snap.setOnClickListener(new View.OnClickListener() {
         if(tabmain.getVisibility()==View.VISIBLE){
             tabmain.setVisibility(View.GONE);
         }
-        capture(snap.getText().equals("📤")?1:2);
+        capture(snap.getText().equals("📷")?1:2);
         Handler handler4 = new Handler();
         handler4.postDelayed(new Runnable() {//after pressing when there is a selection
             @Override
@@ -528,7 +530,10 @@ for (int i=0;i<totallength;i++){
         SpannableString selectionr = new SpannableString("");
         SpannedString newparts = new SpannedString("");
 
+
+
         AbsoluteSizeSpan[] spannedsize = m.getText().getSpans(ss, se, AbsoluteSizeSpan.class);
+
         StyleSpan[] spannedsize2 = m.getText().getSpans(ss, se, StyleSpan.class);
         BackgroundColorSpan[] spannedsize3 = m.getText().getSpans(ss, se, BackgroundColorSpan.class);
         UnderlineSpan[] spannedsize4 = m.getText().getSpans(ss, se, UnderlineSpan.class);
@@ -577,18 +582,58 @@ for (int i=0;i<totallength;i++){
         int totallength = spannedsize.length + spannedsize2.length + spannedsize3.length + spannedsize4.length;
         int actualtotallength = totallength;
 
-        for (int sp = 0; sp < totallength; sp++) {//for inside word
+if(totallength>0){// to sort the span arrays
+
+    if(spannedsize.length>0) {
+        Arrays.sort(spannedsize, new Comparator<AbsoluteSizeSpan>() {
+            @Override
+            public int compare(AbsoluteSizeSpan o1, AbsoluteSizeSpan o2) {
+                return m.getText().getSpanStart(o1) - m.getText().getSpanStart(o2);
+            }
+        });
+    }
+    if(spannedsize2.length>0) {
+        Arrays.sort(spannedsize2, new Comparator<StyleSpan>() {
+            @Override
+            public int compare(StyleSpan o1, StyleSpan o2) {
+                return m.getText().getSpanStart(o1) - m.getText().getSpanStart(o2);
+            }
+        });
+    }
+    if(spannedsize3.length>0) {
+        Arrays.sort(spannedsize3, new Comparator<BackgroundColorSpan>() {
+            @Override
+            public int compare(BackgroundColorSpan o1, BackgroundColorSpan o2) {
+                return m.getText().getSpanStart(o1) - m.getText().getSpanStart(o2);
+            }
+        });
+    }
+    if(spannedsize4.length>0) {
+        Arrays.sort(spannedsize4, new Comparator<UnderlineSpan>() {
+            @Override
+            public int compare(UnderlineSpan o1, UnderlineSpan o2) {
+                return m.getText().getSpanStart(o1) - m.getText().getSpanStart(o2);
+            }
+        });
+    }
+
+}
+
+        for (int spanCounter = 0; spanCounter < totallength; spanCounter++) {//for inside word
             int pst = -1;
             int pend = -1;
             int subvar = -1;
             int si = -1, ei = -1, si1 = -1, ei1 = -1, si2 = -1, ei2 = -1, si3 = -1, ei3 = -1;
-            if (spannedsize.length > (sp + (high + style + under))) {
 
-                si = m.getText().getSpanStart(spannedsize[sp + (high + style + under)]);
-                ei = m.getText().getSpanEnd(spannedsize[sp + (high + style + under)]);//endinf index
+            if (spannedsize.length > (spanCounter + (high + style + under))) {
 
 
-                CurrentSize = spannedsize[sp + (high + style + under)].getSize();
+
+                    si = m.getText().getSpanStart(spannedsize[spanCounter + (high + style + under)]);
+                    ei = m.getText().getSpanEnd(spannedsize[spanCounter + (high + style + under)]);//endinf index
+
+
+                CurrentSize = spannedsize[spanCounter + (high + style + under)].getSize();
 
 
                 pst = si;
@@ -596,16 +641,16 @@ for (int i=0;i<totallength;i++){
 
 
             }
-            if (spannedsize4.length > sunder + (sp + (high + style + abs))) {
+            if (spannedsize4.length > sunder + (spanCounter + (high + style + abs))) {
 
-                si3 = m.getText().getSpanStart(spannedsize4[sunder + (sp + (high + style + abs))]);
-                ei3 = m.getText().getSpanEnd(spannedsize4[sunder + (sp + (high + style + abs))]);//endinf index
+                si3 = m.getText().getSpanStart(spannedsize4[sunder + (spanCounter + (high + style + abs))]);
+                ei3 = m.getText().getSpanEnd(spannedsize4[sunder + (spanCounter + (high + style + abs))]);//endinf index
 
                 if (ei3 < pend) {
                     pend = ei3;
                     pst = si3;
                 } else if (ei3 == pend) {
-                    subvar = switchspans(size, sstyle, shigh, sunder, sp, high, under, abs, style);//for getting the right index of the span
+                    subvar = switchspans(size, sstyle, shigh, sunder, spanCounter, high, under, abs, style);//for getting the right index of the span
 
                     totallength = totallength - 1;
                 } else if (pend == -1) {
@@ -614,19 +659,19 @@ for (int i=0;i<totallength;i++){
                 }
             }
 
-            if (spannedsize2.length > sstyle + (sp + (high + under + abs))) {
+            if (spannedsize2.length > sstyle + (spanCounter + (high + under + abs))) {
 
 
-                si1 = m.getText().getSpanStart(spannedsize2[sstyle + (sp + (high + under + abs))]);
-                ei1 = m.getText().getSpanEnd(spannedsize2[sstyle + (sp + (high + under + abs))]);//endinf index
-                v = spannedsize2[sstyle + (sp + (high + under + abs))].getStyle();
+                si1 = m.getText().getSpanStart(spannedsize2[sstyle + (spanCounter + (high + under + abs))]);
+                ei1 = m.getText().getSpanEnd(spannedsize2[sstyle + (spanCounter + (high + under + abs))]);//endinf index
+                v = spannedsize2[sstyle + (spanCounter + (high + under + abs))].getStyle();
 
                 if (ei1 < pend) {
                     pend = ei1;
                     pst = si1;
 
                 } else if (ei1 == pend) {
-                    subvar = switchspans(size, sstyle, shigh, sunder, sp, high, under, abs, style);
+                    subvar = switchspans(size, sstyle, shigh, sunder, spanCounter, high, under, abs, style);
                     totallength = totallength - 1;
 
                 } else if (pend == -1) {
@@ -634,19 +679,19 @@ for (int i=0;i<totallength;i++){
                     pend = ei1;
                 }
             }
-            if (spannedsize3.length > shigh + (sp + (style + under + abs))) {
+            if (spannedsize3.length > shigh + (spanCounter + (style + under + abs))) {
 
 
-                si2 = m.getText().getSpanStart(spannedsize3[shigh + (sp + (style + under + abs))]);
-                ei2 = m.getText().getSpanEnd(spannedsize3[shigh + (sp + (style + under + abs))]);//endinf index
-                colororig = spannedsize3[shigh + (sp + (style + under + abs))].getBackgroundColor();
+                si2 = m.getText().getSpanStart(spannedsize3[shigh + (spanCounter + (style + under + abs))]);
+                ei2 = m.getText().getSpanEnd(spannedsize3[shigh + (spanCounter + (style + under + abs))]);//endinf index
+                colororig = spannedsize3[shigh + (spanCounter + (style + under + abs))].getBackgroundColor();
 
 
                 if (ei2 < pend) {
                     pend = ei2;
                     pst = si2;
                 } else if (ei2 == pend) {
-                    subvar = switchspans(size, sstyle, shigh, sunder, sp, high, under, abs, style);
+                    subvar = switchspans(size, sstyle, shigh, sunder, spanCounter, high, under, abs, style);
                     totallength = totallength - 1;
                 } else if (pend == -1) {
                     pst = si2;
@@ -657,14 +702,14 @@ for (int i=0;i<totallength;i++){
 
             if (pend == ei) {
                 if (subvar == -1) {
-                    subvar = sp + (high + style + under);
+                    subvar = spanCounter + (high + style + under);
                 }
                 abs--;
             }
             if (pend == ei1) {
                 if (pend != ei) {
                     if (subvar == -1) {
-                        subvar = (sstyle) + (sp + (high + under + abs));
+                        subvar = (sstyle) + (spanCounter + (high + under + abs));
                     }
                     style--;
                 } else {//if there is a similarity
@@ -674,7 +719,7 @@ for (int i=0;i<totallength;i++){
             if (pend == ei2) {
                 if (pend != ei && pend != ei1) {
                     if (subvar == -1) {
-                        subvar = (shigh) + (sp + (style + under + abs));
+                        subvar = (shigh) + (spanCounter + (style + under + abs));
                     }
                     high--;
                 } else {
@@ -684,13 +729,17 @@ for (int i=0;i<totallength;i++){
             if (pend == ei3) {
                 if (pend != ei && pend != ei1 && pend != ei2) {
                     if (subvar == -1) {
-                        subvar = (sunder) + (sp + (high + style + abs));
+                        subvar = (sunder) + (spanCounter + (high + style + abs));
                     }
                     under--;
                 } else {
                     sunder++;
                 }
             }
+
+
+
+
 
             if (pst < ss && ss < pend && pend < se) {
 
@@ -702,6 +751,9 @@ for (int i=0;i<totallength;i++){
                     selectionl.removeSpan(spannedsize[subvar]);
                     separation = "l";
                     selectionl.setSpan(new AbsoluteSizeSpan(CurrentSize), 0, selectionl.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+
 
                     pst = ss;
                     si = pst;
@@ -756,6 +808,8 @@ for (int i=0;i<totallength;i++){
                     separation = "r";
                     selectionr.setSpan(new AbsoluteSizeSpan(CurrentSize), 0, selectionr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+
+
                     pend = se;
                     ei = pend;
                 }
@@ -786,7 +840,6 @@ for (int i=0;i<totallength;i++){
 
                     pend = se;
                     ei2 = pend;
-                    Toast.makeText(this, String.valueOf(selectionr), Toast.LENGTH_SHORT).show();
 
                 }
                 if (se < ei3 && si3 < se && ss < si3) {// underline right
@@ -801,19 +854,20 @@ for (int i=0;i<totallength;i++){
 
                     pend = se;
                     ei3 = pend;
-                    Toast.makeText(this, String.valueOf(selectionr), Toast.LENGTH_SHORT).show();
 
                 }
 
             }
             //separation implementation
 
-            if (separation.equals("l") && sp == 0 || separation.equals("r")) {
+            if (separation.equals("l") && spanCounter == 0 || separation.equals("r")) {
 
                 a = (SpannedString) TextUtils.concat(a.subSequence(0, ss - selectionl.length()), selectionl, a.subSequence(ss, selectionr.toString().isEmpty() ? m.length() : se - selectionr.length()), selectionr, selectionr.toString().isEmpty() ? "" : a.subSequence(se, m.length()));
 
                 m.setText(a);
                 //separated so they can only come in right
+
+
 
             }
 
@@ -961,8 +1015,9 @@ for (int i=0;i<totallength;i++){
             }
             if ((size == 0 || size > 0) && pend == ei || (size == -4 || size == -1) && pend == ei1 || size == -2 && pend == ei2 || size == -3 && pend == ei3) {// if span is same type
 
-
+// FIXME: 9/11/2019 removal for more than 4 parts issue
                 m.getText().removeSpan(size == -2 && ((maindiff == (se - ss) || colorchang == 1)) ? spannedsize3[subvar] : size == -2 ? null : size == -3 && maindiff == (se - ss) ? spannedsize4[subvar] : size < 0 && (maindiff == (se - ss) || ind == -2) ? spannedsize2[subvar] : size < 0 ? null : spannedsize[subvar]);//for all possabilities plus inf whole span is selected for style spans it gets removed
+
 
 
             }
@@ -976,8 +1031,9 @@ for (int i=0;i<totallength;i++){
                 newparts = (SpannedString) TextUtils.concat(newparts, selection);
             }
             oldei = pend - 1;
-
             selection = new SpannableString(m.getText().subSequence(pst, pend));
+
+            AbsoluteSizeSpan[] spandfnedsize = m.getText().getSpans(0, m.length(), AbsoluteSizeSpan.class);
 
             if ((ind > -1 || (size == -3 ? pend != ei3 : size == -2 ? pend != ei2 : size < 0 && pend != ei1))) {//if no spans in same type
 
@@ -1053,13 +1109,13 @@ for (int i=0;i<totallength;i++){
             newparts = (SpannedString) TextUtils.concat(newparts, selection);
 
 
-            if (sp == 0 && pst > 0 && ss < pst) {
+            if (spanCounter == 0 && pst > 0 && ss < pst) {// at start of sentence
                 selection = new SpannableString(m.getText().subSequence(ss, pst));
 
                 selection = empty(size, selection);
                 newparts = (SpannedString) TextUtils.concat(selection, newparts);
             }
-            if (sp == totallength - 1 && se > pend) {
+            if (spanCounter == totallength - 1 && se > pend) {//at end of sentence
 
                 selection = new SpannableString(m.getText().subSequence(pend, se));
                 pend = se;//to catch last char
@@ -1074,6 +1130,11 @@ for (int i=0;i<totallength;i++){
 
         }
         if (totallength == 0) {
+
+
+
+            Toast.makeText(this, "start", Toast.LENGTH_SHORT).show();
+
             if (size == -1) {
 
                 selection.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), 0, selection.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -1103,6 +1164,7 @@ for (int i=0;i<totallength;i++){
         m.setText(a);
 
         m.setSelection(st, end);
+
 
     }
 
@@ -1620,7 +1682,7 @@ private void colorset(int col){
         }
         if (id == R.id.share) {
             snap.setVisibility(View.VISIBLE);
-            snap.setText("📤");
+            snap.setText("🚀");
             afterselection();
         }
         if (id == R.id.ac) {
@@ -1746,6 +1808,7 @@ private void colorset(int col){
 
                 // DATABASE saving
                 serialization();
+                Log.i("serial",String.valueOf(serial));
                 values.put(Database.Text, m.getText().toString());
                 values.put(Database.size, m.getTextSize());
                 values.put(Database.RICHText, serial);
@@ -1759,7 +1822,7 @@ private void colorset(int col){
 
         } else
 
-                onBackPressed();
+                super.onBackPressed();
         }
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

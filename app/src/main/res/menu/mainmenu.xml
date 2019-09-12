@@ -6,7 +6,7 @@
         android:id="@+id/ac" />
 
     <item
-        android:title="✖"
+        android:title="X"
 
         android:id="@+id/clear"
         app:showAsAction="always"
@@ -31,7 +31,7 @@
         android:id="@+id/HIDE"
         app:showAsAction="always" />
     <item
-        android:title="📤"
+        android:title="🚀"
 
         android:id="@+id/share"
         app:showAsAction="always" />
